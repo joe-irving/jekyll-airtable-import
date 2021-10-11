@@ -27,7 +27,7 @@ your site will be built in.
 ### 2. Edit your `_config.yml` file
 
 To tell your Jekyll site which tables to import your site from by defining them
-in the yaml`airtable` as a list of tables:
+in the `airtable` as a list of tables:
 
 ```yaml
 airtable:
@@ -36,14 +36,14 @@ airtable:
     table: tbl4ghFya5hfwmfVQ # the table that contains your data (in this case faq). Can also be the table name
     view: viw4ghFya5hfwmfVQ # the view that you would like to import. NB this will include hidden fields in the view, but only include records in that view.
   resources:
-    app: app9apHbqOifmolTX
-    table: tblGAJiIeFlD6PxNI
-    view: viwBQ8s617LvMdODw
+    app:
+    table:
+    view:
     combine: true # Combine any existing collections with this data? Defaults to false
   partners:
-    app: app9apHbqOifmolTX
-    table: tbl3erzSL6dZfNkZi
-    view: viwcwyl4ejOXEUaS0
+    app:
+    table:
+    view:
     fields: # A list of field names that would like to INCLUDE. Important as views do not filter out hidden fields
     - Title
     - URL
@@ -52,9 +52,9 @@ airtable:
   # In the below case, "trainings" are a collection - so they can be output as pages etc.
   # To define any of the imports as collections, just add a collection hash
   trainings:
-    app: app9apHbqOifmolTX
-    table: tblr8deZvWPtDpT8z
-    view: viwmoConiofljNaYn
+    app:
+    table:
+    view: 
     fields:
     - Content
     - Title
@@ -74,7 +74,7 @@ airtable:
 Each import's key defines its key in the sites data or collection. Each item in the list of imports has these fields:
 
 | Field | Required? | Notes |
-| ---- | ---------|---|
+| ----: | :-------: |---|
 | app | :heavy_check_mark: | The base ID for the Airtable. Starts with `app` and can be found in an Airtable URL |
 | table | :heavy_check_mark: | The table ID or name for the collection/data/  Starts with `tbl` and can be found in an Airtable URL |
 | view |  | The view ID  (or name) for the collection/data/  Starts with `viw` and can be found in an Airtable URL |
@@ -86,7 +86,7 @@ Each import's key defines its key in the sites data or collection. Each item in 
 #### Collection feilds
 
 | Field | Required? | Notes |
-| ---- | ---------|---|
+| ----: | :---------: |---|
 | slug | :heavy_check_mark: | the field title that should be used as the slug. NB the field titles are slugified. E.g. "Start Time" would end up as start_time |
 | layout | :heavy_check_mark: | the name of a layout that exists in your site's (or your site's theme) _layouts folder |
 | content | :heavy_check_mark: | the field title that should be used as the conent. NB the field titles are slugified. E.g. "Event Description" would end up as event_description |
