@@ -5,10 +5,10 @@ create data or collections in Jekyll.
 
 ## Installation
 
-Add ruby`gem "jekyll-airtable-import"` to your Jekyll sites Gemfile, under the
+Add `gem "jekyll-airtable-import"` to your Jekyll sites Gemfile, under the
 plugins group like so:
 
-ruby```
+```ruby
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-airtable-import", path: "/home/joe/Documents/Work/TippingPointUK/jekyll-airtable-import"
@@ -29,7 +29,7 @@ your site will be built in.
 To tell your Jekyll site which tables to import your site from by defining them
 in the yaml`airtable` as a list of tables:
 
-yaml```
+```yaml
 airtable:
   faqs:  # This key defines the name of the data, in this case it would be available under site.data.faqs
     app: app4ghFya5hfwmfVQ # the base ID for the Airtable
@@ -101,4 +101,4 @@ MIT
 
 ## Issues
 
-Just create a pull request :)s
+Just create a pull request :)
