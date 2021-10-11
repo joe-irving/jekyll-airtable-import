@@ -1,5 +1,7 @@
 # Jekyll Airtable importer
 
+[![Gem Version](https://badge.fury.io/rb/jekyll-airtable-import.svg)](https://badge.fury.io/rb/jekyll-airtable-import)
+
 A simple plugin that used the [Airtable gem](https://rubygems.org/gems/airtable)
 create data or collections in Jekyll.
 

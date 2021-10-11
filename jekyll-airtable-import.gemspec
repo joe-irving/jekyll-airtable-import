@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["joe@irving.me.uk"]
 
   spec.summary       = "A simple importer from airtable, to collections or data"
-  spec.homepage      = "https://tippingpointuk.github.io/jekyll-airtable-import"
+  spec.homepage      = "https://github.com/tippingpointuk/jekyll-airtable-import/"
   spec.license       = "MIT"
 
   spec.files         = %w(Gemfile README.md LICENSE.txt) + Dir["lib/**/*"]
