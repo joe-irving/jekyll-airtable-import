@@ -1,0 +1,12 @@
+title: Example Airtable import site
+
+theme: minima
+
+airtable:
+  posts:
+    app: appHld1J1pbRWx2hD
+    table: Posts
+    collection:
+      slug: title
+      layout: post
+      content: content

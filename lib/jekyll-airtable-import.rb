@@ -3,6 +3,9 @@ require 'airtable'
 require 'active_support/all'
 
 module Airtable
+  # Generates Jekyll Collections and Data from Airtable bases.
+  #
+  # See https://tippingpointuk.github.io/jekyll-airtable-import for more.
   class Generator < ::Jekyll::Generator
     priority :medium
 
@@ -22,7 +25,6 @@ module Airtable
       data_parse
     end
     def generate(site)
-      puts "airtable generator"
       return unless site.config['airtable']
       # Get API key from environment
       if ENV['AIRTABLE_API_KEY']

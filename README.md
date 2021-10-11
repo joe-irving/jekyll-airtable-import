@@ -54,7 +54,7 @@ airtable:
   trainings:
     app:
     table:
-    view: 
+    view:
     fields:
     - Content
     - Title
@@ -91,6 +91,10 @@ Each import's key defines its key in the sites data or collection. Each item in 
 | layout | :heavy_check_mark: | the name of a layout that exists in your site's (or your site's theme) _layouts folder |
 | content | :heavy_check_mark: | the field title that should be used as the conent. NB the field titles are slugified. E.g. "Event Description" would end up as event_description |
 
+## Example
+
+Check out an example here
+
 ## Collaborations
 
 Fork away :)
@@ -101,4 +105,4 @@ MIT
 
 ## Issues
 
-Just create a pull request :)
+Just create a new issue
