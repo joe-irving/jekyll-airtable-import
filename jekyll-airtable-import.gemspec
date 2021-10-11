@@ -10,9 +10,12 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://tippingpointuk.github.io/jekyll-airtable-import"
   spec.license       = "MIT"
 
-  spec.files         = ["lib/jekyll-airtable-import.rb"]
+  spec.files         = %w(Gemfile README.md LICENSE.txt) + Dir["lib/**/*"]
 
-  spec.add_runtime_dependency "jekyll", "~> 4.2"
+  spec.required_ruby_version = ">= 2.5.0"
+
+  spec.add_runtime_dependency "jekyll", ">= 3.7", "< 5.0"
+
   spec.add_runtime_dependency "airtable", "~> 0.0.9"
   spec.add_runtime_dependency "activesupport", "~> 6.1"
 end

@@ -22,6 +22,7 @@ module Airtable
       data_parse
     end
     def generate(site)
+      puts "airtable generator"
       return unless site.config['airtable']
       # Get API key from environment
       if ENV['AIRTABLE_API_KEY']
