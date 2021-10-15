@@ -9,7 +9,7 @@ module Airtable
   class Generator < ::Jekyll::Generator
     priority :medium
 
-    def parse_data(data)
+    def parse_airtable_data(data)
       data_parse = []
       data.each do |item|
         # Extract attachments to just their URL
@@ -24,36 +24,51 @@ module Airtable
       end
       data_parse
     end
+
     def generate(site)
       return unless site.config['airtable']
       # Get API key from environment
       if ENV['AIRTABLE_API_KEY']
         api_key = ENV['AIRTABLE_API_KEY']
       else
-        warn "No airtable api key found. Make sure your key is available as AIRTABLE_API_KEY in the local environment."
+        Jekyll.logger.warn "No Airtable api key found. Make sure your key is available as AIRTABLE_API_KEY in the local environment."
+        return
       end
       # Pass in api key to client
       @client = Airtable::Client.new(api_key)
+      @app_id = nil
+      @table_id = nil
       site.config['airtable'].each do |name, conf|
+        if conf['app']
+          @app_id = conf['app'] # Only update app if conf does
+        end
+        unless @app_id
+          Jekyll.logger.warn "No app ID for Airtable import of " + name
+          next
+        end
+        @table_id = conf['table'] if conf['table']
+        unless @table_id
+          Jekyll.logger.warn "No table ID for Airtable import of " + name
+          next
+        end
         # Pass in the app key and table name
-        @table = @client.table(conf['app'], conf['table'])
+        @table = @client.table(@app_id, @table_id)
         # Get records where the Published field is checked
         @records = @table.all(:view => conf['view'],:fields => conf['fields'])
         # Extract data to a hash
         data = @records.map { |record| record.attributes }
-        parsed_data = parse_data(data)
+        parsed_data = parse_airtable_data(data)
         if conf['collection']
           slug_field = conf['collection']['slug']
-          layout = conf['collection']['layout']
+          layout = conf['collection']['layout'] || name
           if site.collections[name]
             new_collection = site.collections[name]
           else
             new_collection = Jekyll::Collection.new(site, name)
           end
-          # new_collection = Jekyll::Collection.new(site, name)
           parsed_data.each do |item|
             if item[slug_field] and item[slug_field] != ''
-              content = item[conf['collection']['content']]
+              content = item[conf['collection']['content'] || 'content']
               #puts content
               slug = Jekyll::Utils.slugify(item[slug_field])
               path = File.join(site.source, "_#{name}", "#{slug}.md")
