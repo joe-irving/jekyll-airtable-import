@@ -16,7 +16,15 @@ module Airtable
         item.each do |key,val|
           if val.kind_of?(Array)
             if val[0]['url']
-              item[key] = val[0]['url']
+              if val.length == 1
+                item[key] = val[0]['url']
+              else
+                item[key] = []
+              end
+              val.each do | asset |
+                item[key] << asset['url']
+              end
+
             end
           end
         end
