@@ -1,6 +1,7 @@
 require 'jekyll'
 require 'airtable'
 require 'active_support/all'
+require 'jekyll-airtable-import/linker'
 
 module Airtable
   # Generates Jekyll Collections and Data from Airtable bases.
@@ -64,9 +65,10 @@ module Airtable
         @records = @table.all(:view => conf['view'],:fields => conf['fields'])
         # Extract data to a hash
         data = @records.map { |record| record.attributes }
+        # puts data
         parsed_data = parse_airtable_data(data)
         if conf['collection']
-          slug_field = conf['collection']['slug']
+          slug_field = conf['collection']['slug'] || "slug"
           layout = conf['collection']['layout'] || name
           if site.collections[name]
             new_collection = site.collections[name]
@@ -74,18 +76,26 @@ module Airtable
             new_collection = Jekyll::Collection.new(site, name)
           end
           parsed_data.each do |item|
-            if item[slug_field] and item[slug_field] != ''
-              content = item[conf['collection']['content'] || 'content']
-              #puts content
+            content = item[conf['collection']['content'] || 'content']
+            add_frontmatter = { 'layout' => layout}
+            if item[slug_field]
               slug = Jekyll::Utils.slugify(item[slug_field])
-              path = File.join(site.source, "_#{name}", "#{slug}.md")
-              doc = Jekyll::Document.new(path, collection: new_collection, site: site)
-              item.merge!({ 'layout' => layout, 'slug' => slug })
-              doc.merge_data!(item.except('id'))
-
-              doc.content = content
-              new_collection.docs << doc
+            else
+              slug = Jekyll::Utils.slugify(item['title'])
+              add_frontmatter['url'] = item['url']
             end
+            add_frontmatter['slug'] = slug
+            path = File.join(site.source, "_#{name}", "#{slug}.md")
+            doc = Jekyll::Document.new(path, collection: new_collection, site: site)
+            item.merge!(add_frontmatter)
+            doc.merge_data!(item)
+            if item['url']
+              # doc['url'] = item['url']
+            end
+
+            doc.content = content
+            new_collection.docs << doc
+
           end
           site.collections[name] = new_collection
         else
