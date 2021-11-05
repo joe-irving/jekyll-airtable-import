@@ -20,11 +20,10 @@ module Airtable
                 item[key] = val[0]['url']
               else
                 item[key] = []
+                val.each do | asset |
+                  item[key] << asset['url']
+                end
               end
-              val.each do | asset |
-                item[key] << asset['url']
-              end
-
             end
           end
         end
