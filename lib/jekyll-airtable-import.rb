@@ -89,9 +89,6 @@ module Airtable
             doc = Jekyll::Document.new(path, collection: new_collection, site: site)
             item.merge!(add_frontmatter)
             doc.merge_data!(item)
-            if item['url']
-              # doc['url'] = item['url']
-            end
 
             doc.content = content
             new_collection.docs << doc
