@@ -95,7 +95,42 @@ Each import's key defines its key in the sites data or collection. Each item in 
 
 ## Example
 
-Check out an example here
+Check out [an example here](https://doa.netlify.app/readme/).
+
+## Troubleshooting
+
+### Errors
+
+`No API key found. Make sure your key is available as AIRTABLE_API_KEY in the local environment`
+
+You can get your Airtable api key from [your account page](https://airtable.com/account).
+
+To add the variable to your local environment run:
+
+  $ export AIRTABLE_API_KEY="keyYOURUNIQUEKEY"
+
+or add it via other means.
+
+Run
+
+  $ env
+
+to check if it is there.
+
+It is highly recommended to create a read only api key for the base(s) you are importing from.
+Check out [this article for how](https://support.airtable.com/hc/en-us/articles/360056249614-Creating-a-read-only-API-key)
+
+`No table ID for Airtable import of...`
+
+Make sure that at least the first entry in the `airtable` _config.yml section
+has something like this.
+
+```yaml
+table: Posts #table name or id
+```
+
+if there are more imports below without a table entry, then it will default to
+the last one.
 
 ## Collaborations
 
