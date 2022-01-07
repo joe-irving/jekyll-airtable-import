@@ -11,3 +11,5 @@
 * Do not accept slug feild if is lookup
 * For some reason collection only working if collection: true
 * Only run linker if import succeeds
+* Deal with not finding field cleanly
+  * Use metadata api to get list of feilds, and only use overlap. Create warning if any feilds do not exist
