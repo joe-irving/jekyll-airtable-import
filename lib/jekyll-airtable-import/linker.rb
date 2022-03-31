@@ -49,6 +49,11 @@ module Airtable
       end
 
       def link_record(record)
+        # if record.is_a?(Jekyll::Document)
+        #   data = record.data
+        # else
+        #   data = record
+        # end
         record.map do |key, val|
           next unless is_lookup(val)
           Jekyll.logger.debug "Airtable:", "Linker: trying to find match for this id: #{val[0]}, labeled as #{key}"
@@ -81,10 +86,17 @@ module Airtable
           data = site.data[name]
           collection = site.collections[name]
           if data
-            site.data[name] = data.map { |rec|  link_record(rec)}
+            site.data[name] = data.map do |rec|
+              if rec.is_a?(Jekyll::Document)
+                link_record(rec.data)
+              else
+                link_record(rec)
+              end
+            end
           end
           if collection
             collection.docs.each do |doc|
+              puts doc.data
               linked = link_record(doc.data)
               # puts linked
               doc.merge_data!(linked)
