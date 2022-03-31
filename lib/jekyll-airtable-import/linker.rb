@@ -96,7 +96,6 @@ module Airtable
           end
           if collection
             collection.docs.each do |doc|
-              puts doc.data
               linked = link_record(doc.data)
               # puts linked
               doc.merge_data!(linked)
