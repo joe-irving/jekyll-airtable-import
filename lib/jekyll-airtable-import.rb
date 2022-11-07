@@ -13,8 +13,9 @@ module Airtable
     priority :medium
 
     def download_attachment(at_attachment)
-      ext = at_attachment['type'].split('/')[-1]
-      file_name = "#{at_attachment['filename']}.#{ext}"
+      ext = ".#{at_attachment['type'].split('/')[-1]}" if at_attachment['type'].is_a? String
+      ext ||= ''
+      file_name = "#{at_attachment['filename']}#{ext}"
       
       Dir.mkdir "#{Dir.pwd}/assets" unless Dir.exists? "#{Dir.pwd}/assets"
       assets_dir = Dir.mkdir "#{Dir.pwd}/assets/airtable" unless Dir.exists? "#{Dir.pwd}/assets/airtable"
