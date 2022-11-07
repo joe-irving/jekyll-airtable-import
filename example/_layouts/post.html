@@ -3,4 +3,8 @@ layout: page
 ---
 <img src="{{ page.image }}" alt="">
 
+{% for a in page.authors %}
+<a href="{{ a.url }}">{{ a.title }}</a>
+{% endfor %}
+
 {{ content }}
