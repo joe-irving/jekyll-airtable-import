@@ -20,9 +20,11 @@ module Airtable
       assets_dir = Dir.mkdir "#{Dir.pwd}/assets/airtable" unless Dir.exists? "#{Dir.pwd}/assets/airtable"
       new_path = "#{Dir.pwd}/assets/airtable/#{file_name}"
       return "/assets/airtable/#{file_name}" if File.exists? new_path
+
       attachment = URI.open(at_attachment['url'])
       IO.copy_stream(attachment, new_path)
       new_file = Jekyll::StaticFile.new(@site, @site.source, '/assets/airtable/', file_name)
+      @site.static_files << new_file
 
       new_file.url
     end

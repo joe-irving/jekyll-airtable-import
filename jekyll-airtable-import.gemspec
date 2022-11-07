@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-airtable-import"
-  spec.version       = "0.1.3"
+  spec.version       = "0.1.5"
   spec.authors       = ["joe-irving"]
   spec.email         = ["joe@irving.me.uk"]
 
