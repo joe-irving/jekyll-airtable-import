@@ -15,10 +15,12 @@ module Airtable
     def download_attachment(at_attachment)
       ext = at_attachment['type'].split('/')[-1]
       file_name = "#{at_attachment['filename']}.#{ext}"
-      attachment = URI.open(at_attachment['url'])
-      assets_dir = Dir.mkdir "#{Dir.pwd}/assets" unless Dir.exists? "#{Dir.pwd}/assets"
+      
+      Dir.mkdir "#{Dir.pwd}/assets" unless Dir.exists? "#{Dir.pwd}/assets"
       assets_dir = Dir.mkdir "#{Dir.pwd}/assets/airtable" unless Dir.exists? "#{Dir.pwd}/assets/airtable"
       new_path = "#{Dir.pwd}/assets/airtable/#{file_name}"
+      return "/assets/airtable/#{file_name}" if File.exists? new_path
+      attachment = URI.open(at_attachment['url'])
       IO.copy_stream(attachment, new_path)
       new_file = Jekyll::StaticFile.new(@site, @site.source, '/assets/airtable/', file_name)
 
@@ -104,29 +106,27 @@ module Airtable
           else
             new_collection = Jekyll::Collection.new(site, name)
           end
-          parsed_data.each do |item|
-            if item[slug_field] and item[slug_field] != ''
-              content = item[conf['collection']['content'] || 'content']
-              #puts content
-              for slug_field in slug_fields
-                if item[slug_field] and !item[slug_field].is_a?(Array)
-                  slug = Jekyll::Utils.slugify(item[slug_field])
-                  break
-                end
+          parsed_data.each_with_index do |item, index|
+            content = item[conf['collection']['content'] || 'content'] if conf['collection'].is_a?(Hash)
+            #puts content
+            for slug_field in slug_fields
+              if item[slug_field] and !item[slug_field].is_a?(Array)
+                slug = Jekyll::Utils.slugify(item[slug_field])
+                break
               end
-              slug ||= Jekyll::Utils.slugify("#{name}#{index}")
-              path = File.join(site.source, "_#{name}", "#{slug}.md")
-              doc = Jekyll::Document.new(path, collection: new_collection, site: site)
-              item.merge!({
-                'layout' => layout,
-                'slug' => slug,
-                'airtable_id' => item['id']
-              })
-              doc.merge_data!(item.except('id'))
-
-              doc.content = content
-              new_collection.docs << doc
             end
+            slug ||= Jekyll::Utils.slugify("#{name}#{index}")
+            path = File.join(site.source, "_#{name}", "#{slug}.md")
+            doc = Jekyll::Document.new(path, collection: new_collection, site: site)
+            item.merge!({
+              'layout' => layout,
+              'slug' => slug,
+              'airtable_id' => item['id']
+            })
+            doc.merge_data!(item.except('id'))
+
+            doc.content = content
+            new_collection.docs << doc
           end
           site.collections[name] = new_collection
         else

@@ -7,3 +7,7 @@ airtable:
     app: appHld1J1pbRWx2hD
     table: Posts # Could also be the table ID (in URL, starts with tbl... )
     collection: true
+  authors:
+    app: appHld1J1pbRWx2hD
+    table: Authors
+    collection: true

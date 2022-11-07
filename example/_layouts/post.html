@@ -3,6 +3,8 @@ layout: page
 ---
 <img src="{{ page.image }}" alt="">
 
-{{ page.airtable_id }}
+{% for a in page.authors %}
+<a href="{{ a.url }}">{{ a.title }}</a>
+{% endfor %}
 
 {{ content }}
