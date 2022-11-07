@@ -1,6 +1,8 @@
 require 'jekyll'
 require 'airtable'
 require 'active_support/all'
+require 'open-uri'
+require 'dotenv/load'
 
 module Airtable
   # Generates Jekyll Collections and Data from Airtable bases.
@@ -8,6 +10,19 @@ module Airtable
   # See https://tippingpointuk.github.io/jekyll-airtable-import for more.
   class Generator < ::Jekyll::Generator
     priority :medium
+
+    def download_attachment(at_attachment)
+      ext = at_attachment['type'].split('/')[-1]
+      file_name = "#{at_attachment['filename']}.#{ext}"
+      attachment = URI.open(at_attachment['url'])
+      assets_dir = Dir.mkdir "#{Dir.pwd}/assets" unless Dir.exists? "#{Dir.pwd}/assets"
+      assets_dir = Dir.mkdir "#{Dir.pwd}/assets/airtable" unless Dir.exists? "#{Dir.pwd}/assets/airtable"
+      new_path = "#{Dir.pwd}/assets/airtable/#{file_name}"
+      IO.copy_stream(attachment, new_path)
+      new_file = Jekyll::StaticFile.new(@site, @site.source, '/assets/airtable/', file_name)
+
+      new_file.url
+    end
 
     def parse_airtable_data(data)
       data_parse = []
@@ -17,11 +32,11 @@ module Airtable
           if val.kind_of?(Array)
             if val[0]['url']
               if val.length == 1
-                item[key] = val[0]['url']
+                item[key] = download_attachment(val[0])
               else
                 item[key] = []
                 val.each do | asset |
-                  item[key] << asset['url']
+                  item[key] << download_attachment(asset)
                 end
               end
             end
@@ -34,6 +49,8 @@ module Airtable
 
     def generate(site)
       return unless site.config['airtable']
+
+      @site = site
       # Get API key from environment
       if ENV['AIRTABLE_API_KEY']
         api_key = ENV['AIRTABLE_API_KEY']
@@ -80,7 +97,11 @@ module Airtable
               slug = Jekyll::Utils.slugify(item[slug_field])
               path = File.join(site.source, "_#{name}", "#{slug}.md")
               doc = Jekyll::Document.new(path, collection: new_collection, site: site)
-              item.merge!({ 'layout' => layout, 'slug' => slug })
+              item.merge!({
+                'layout' => layout,
+                'slug' => slug,
+                'airtable_id' => item['id']
+              })
               doc.merge_data!(item.except('id'))
 
               doc.content = content

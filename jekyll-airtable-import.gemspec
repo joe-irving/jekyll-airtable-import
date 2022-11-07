@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-airtable-import"
-  spec.version       = "0.1.2"
+  spec.version       = "0.1.3"
   spec.authors       = ["joe-irving"]
   spec.email         = ["joe@irving.me.uk"]
 
@@ -18,4 +18,5 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "airtable", "~> 0.0.9"
   spec.add_runtime_dependency "activesupport", "~> 6.1"
+  spec.add_runtime_dependency "dotenv", ">=2.8", "<3.0"
 end
