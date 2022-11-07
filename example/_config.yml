@@ -5,8 +5,5 @@ theme: minima
 airtable:
   posts:
     app: appHld1J1pbRWx2hD
-    table: Posts
-    collection:
-      slug: title
-      layout: post
-      content: content
+    table: Posts # Could also be the table ID (in URL, starts with tbl... )
+    collection: true

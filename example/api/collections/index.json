@@ -1,0 +1,13 @@
+---
+sitemap: false
+---
+{
+  {% for col in site.collections %}
+  {% assign name =  col.label %}
+  "{{ name }}":[
+    {% for i in site[name] %}
+    {{i | jsonify}}{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+  {% endfor %}
+}
