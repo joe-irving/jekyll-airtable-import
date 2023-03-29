@@ -29,7 +29,8 @@ your site will be built in.
 ### 2. Edit your `_config.yml` file
 
 To tell your Jekyll site which tables to import your site from by defining them
-in the `airtable` as a list of tables:
+in the `airtable` as a list of tables:.
+
 
 ```yaml
 airtable:
@@ -77,8 +78,8 @@ Each import's key defines its key in the sites data or collection. Each item in 
 
 | Field | Required? | Notes |
 | ----: | :-------: |---|
-| app | :heavy_check_mark: | The base ID for the Airtable. Starts with `app` and can be found in an Airtable URL |
-| table | :heavy_check_mark: | The table ID or name for the collection/data/  Starts with `tbl` and can be found in an Airtable URL |
+| app | :heavy_check_mark: | The base ID for the Airtable. Starts with `app` and can be found in an Airtable URL. You can use evironment variables for this by prefixing `ENV_` to the defined environment variable. E.g. if you define  `AIRTABLE_BASE_ID=app4ghFya5hfwmfVQ` you could put the line `app: ENV_AIRTABLE_BASE_ID` in the config. |
+| table | :heavy_check_mark: | The table ID or name for the collection/data/  Starts with `tbl` and can be found in an Airtable URL. You can use evironment variables for this by prefixing `ENV_` to the defined environment variable. E.g. if you define  `AIRTABLE_TABLE_POSTS=tbl4ghFya5hfwmfVQ` in the environment you could put the line `table: ENV_AIRTABLE_TABLE_POSTS` in the config. |
 | view |  | The view ID  (or name) for the collection/data/  Starts with `viw` and can be found in an Airtable URL |
 | fields | | A list of fields found in the headings of Airtable columns, defining the only fields to be imported |
 | collection | | If this is defined, the Airtable table will be imported into a collection rather than data. |

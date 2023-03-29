@@ -75,13 +75,16 @@ module Airtable
       site.config['airtable'].each do |name, conf|
         conf ||= Hash.new
         if conf['app']
-          @app_id = conf['app'] # Only update app if conf does
+          # Only update app if conf does
+          @app_id = conf['app'][0..3] == 'ENV_' ? ENV[conf['app'][4..-1]] : conf['app']
         end
         unless @app_id
           Jekyll.logger.warn @log_name, "No app ID for Airtable import of #{name}"
           next
         end
-        @table_id = conf['table'] if conf['table']
+        if conf['table']
+          @table_id = conf['table'][0..3] == 'ENV_' ? ENV[conf['table'][4..-1]] : conf['table']
+        end
         unless @table_id
           Jekyll.logger.warn @log_name, "No table ID for Airtable import of #{name}"
           next
