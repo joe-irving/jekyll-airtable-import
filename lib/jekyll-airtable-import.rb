@@ -72,6 +72,7 @@ module Airtable
       @client = Airtable::Client.new(api_key)
       @app_id = nil
       @table_id = nil
+      @view_id = nil
       site.config['airtable'].each do |name, conf|
         conf ||= Hash.new
         if conf['app']
@@ -89,11 +90,14 @@ module Airtable
           Jekyll.logger.warn @log_name, "No table ID for Airtable import of #{name}"
           next
         end
+        if conf['view']
+          @view_id = conf['view'][0..3] == 'ENV_' ? ENV[conf['view'][4..-1]] : conf['view']
+        end
         Jekyll.logger.debug @log_name, "Importing #{name} from https://airtable.com/#{@app_id}/#{@table_id}/#{conf['view']}"
         # Pass in the app key and table name
         @table = @client.table(@app_id, @table_id)
         # Get records where the Published field is checked
-        @records = @table.all(:view => conf['view'],:fields => conf['fields'])
+        @records = @table.all(:view => @view_id,:fields => conf['fields'])
         Jekyll.logger.debug @log_name, "Found #{@records.length} records to import for #{name}"
         # Extract data to a hash
         data = @records.map { |record| record.attributes }

@@ -79,6 +79,7 @@ module Airtable
       def generate(site)
         return unless site.config['airtable']
         return unless ENV['AIRTABLE_API_KEY']
+        # return if site.config["airtable_no_links"]
         @site = site
         @conf = site.config['airtable']
         @conf.each do |name, conf|
