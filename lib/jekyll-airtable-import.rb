@@ -17,10 +17,10 @@ module Airtable
       ext ||= ''
       file_name = "#{at_attachment['filename']}-#{at_attachment['id']}#{ext}"
       
-      Dir.mkdir "#{Dir.pwd}/assets" unless Dir.exists? "#{Dir.pwd}/assets"
-      assets_dir = Dir.mkdir "#{Dir.pwd}/assets/airtable" unless Dir.exists? "#{Dir.pwd}/assets/airtable"
+      Dir.mkdir "#{Dir.pwd}/assets" unless Dir.exist? "#{Dir.pwd}/assets"
+      assets_dir = Dir.mkdir "#{Dir.pwd}/assets/airtable" unless Dir.exist? "#{Dir.pwd}/assets/airtable"
       new_path = "#{Dir.pwd}/assets/airtable/#{file_name}"
-      return "/assets/airtable/#{file_name}" if File.exists? new_path
+      return "/assets/airtable/#{file_name}" if File.exist? new_path
 
       attachment = URI.open(at_attachment['url'])
       IO.copy_stream(attachment, new_path)
