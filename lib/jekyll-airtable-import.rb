@@ -4,6 +4,7 @@ require 'active_support/all'
 require 'open-uri'
 require 'dotenv/load'
 require 'jekyll-airtable-import/linker'
+require 'retriable'
 
 module Airtable
   # Generates Jekyll::Collection s and Data from Airtable bases.
@@ -22,8 +23,14 @@ module Airtable
       new_path = "#{Dir.pwd}/assets/airtable/#{file_name}"
       return "/assets/airtable/#{file_name}" if File.exist? new_path
 
-      attachment = URI.open(at_attachment['url'])
-      IO.copy_stream(attachment, new_path)
+      # This can throw an error when downloading all attachments at once in first deploy. 
+      # Add exponential back off.
+      Retriable.retriable(on: [Net::OpenTimeout]) do
+        attachment = URI.open(at_attachment['url'])
+        IO.copy_stream(attachment, new_path)
+      end
+      
+
       new_file = Jekyll::StaticFile.new(@site, @site.source, '/assets/airtable/', file_name)
       @site.static_files << new_file
 

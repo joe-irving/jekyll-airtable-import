@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "jekyll", ">= 3.7", "< 5.0"
 
   spec.add_runtime_dependency "airtable", "~> 0.0.9"
+  spec.add_runtime_dependency "retriable", "~> 3.1"
   spec.add_runtime_dependency "activesupport", "~> 6.1"
   spec.add_runtime_dependency "dotenv", ">=2.8", "<3.0"
 end
