@@ -78,10 +78,10 @@ module Airtable
       # Pass in api key to client
       @client = Airtable::Client.new(api_key)
       @app_id = nil
-      @table_id = nil
-      @view_id = nil
       site.config['airtable'].each do |name, conf|
         conf ||= Hash.new
+        @table_id = nil
+        @view_id = nil
         if conf['app']
           # Only update app if conf does
           @app_id = conf['app'][0..3] == 'ENV_' ? ENV[conf['app'][4..-1]] : conf['app']
@@ -100,7 +100,7 @@ module Airtable
         if conf['view']
           @view_id = conf['view'][0..3] == 'ENV_' ? ENV[conf['view'][4..-1]] : conf['view']
         end
-        Jekyll.logger.debug @log_name, "Importing #{name} from https://airtable.com/#{@app_id}/#{@table_id}/#{conf['view']}"
+        Jekyll.logger.debug @log_name, "Importing #{name} from https://airtable.com/#{@app_id}/#{@table_id}/#{@view_id}"
         # Pass in the app key and table name
         @table = @client.table(@app_id, @table_id)
         # Get records where the Published field is checked
