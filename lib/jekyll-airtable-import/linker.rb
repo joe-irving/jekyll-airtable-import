@@ -18,10 +18,14 @@ module Airtable
       def lookup_airtable_id(id)
         # lookup = nil
         @conf.each do |name, conf|
+          # Collection or data?
           col = @site.collections[name] || nil
           data = @site.data[name] || nil
+          # If the item in the config is a collection and that collection is found to exist in Jekyll instance
           if conf['collection'] and col
+            # Search that collection for matching airtable_id
             matched_record = col.docs.select {|i| i.data['airtable_id'] == id}
+            # If a match is found create a lookup value
             if matched_record.length > 0
               lookup = {
                 'type' => 'collection',
@@ -31,6 +35,7 @@ module Airtable
               }
               return lookup
             end
+            # else continue on and check if data
           end
           if data and not conf['collection']
             matched_record = data.select {|i| i['airtable_id'] == id}
@@ -57,8 +62,16 @@ module Airtable
         record.map do |key, val|
           next unless is_lookup(val)
           Jekyll.logger.debug "Airtable:", "Linker: trying to find match for this id: #{val[0]}, labeled as #{key}"
-          match = lookup_airtable_id(val[0])
-          next unless match
+          # Loop through linked field IDs, trying to match to a named configuration in the airtable importer in jekyll
+          match = nil
+          val.each do |record_id|
+            match = lookup_airtable_id(record_id)
+            break if match
+          end
+          unless match
+            Jekyll.logger.debug "Airtable:", "Linker: Could not find a match to a jekyll config for record #{record['airtable_id']}, on field #{key}"
+            next
+          end
           Jekyll.logger.debug "Airtable:",  "Linker: matched #{key} with #{match['name']}"
           # puts match.to_yaml
           # new_field = []
